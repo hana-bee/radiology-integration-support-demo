@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Radiology Integration Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 28px 45px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.85;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1450px;
+            margin: 30px auto;
+        }
+
+        .section-title {
+            margin: 30px 0 15px;
+            font-size: 21px;
+            color: #172554;
+        }
+
+        /* PATIENT CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .card-title {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 21px;
+            font-weight: bold;
+            color: #172554;
+        }
+
+        /* WORKFLOW */
+
+        .workflow-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .system {
+            min-width: 115px;
+            padding: 18px 20px;
+            background: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .system small {
+            display: block;
+            margin-top: 7px;
+            font-size: 11px;
+            color: #64748b;
+            font-weight: normal;
+        }
+
+        .arrow {
+            font-size: 25px;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        /* ORDER */
+
+        .order-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .order-item label {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .order-item strong {
+            font-size: 17px;
+        }
+
+        /* STATUS */
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-name {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+
+        .status-dot-failure {
+            background: #ef4444;
+        }
+
+        .status-text {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .failure-text {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        /* BUTTONS */
+
+        .button-area {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #172554;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #1e3a8a;
+        }
+
+        .hl7-button {
+            background: #2563eb;
+        }
+
+        .hl7-button:hover {
+            background: #1d4ed8;
+        }
+
+        .dicom-button {
+            background: #7c3aed;
+        }
+
+        .dicom-button:hover {
+            background: #6d28d9;
+        }
+
+        .network-button {
+            background: #0891b2;
+        }
+
+        .network-button:hover {
+            background: #0e7490;
+        }
+
+        .ris-button {
+            background: #9333ea;
+        }
+
+        .ris-button:hover {
+            background: #7e22ce;
+        }
+
+        .sql-button {
+            background: #0f766e;
+        }
+
+        .sql-button:hover {
+            background: #115e59;
+        }
+
+        .failure-button {
+            background: #b91c1c;
+        }
+
+        .failure-button:hover {
+            background: #991b1b;
+        }
+
+        .reset-button {
+            background: #15803d;
+        }
+
+        .reset-button:hover {
+            background: #166534;
+        }
+
+        /* HL7 */
+
+        .hl7-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .hl7-message {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .success-message {
+            color: #15803d;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* SUPPORT */
+
+        .support-box {
+            margin-top: 25px;
+            padding: 22px;
+            border-radius: 10px;
+        }
+
+        .normal-support {
+            background: #ecfdf5;
+            border-left: 5px solid #22c55e;
+        }
+
+        .failure-support {
+            background: #fef2f2;
+            border-left: 5px solid #ef4444;
+        }
+
+        .support-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .support-box p {
+            line-height: 1.7;
+        }
+
+        .troubleshooting {
+            margin-top: 18px;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        /* LOGS */
+
+        .table-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #172554;
+        }
+
+        .success-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .error-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* QUICK ARCHITECTURE */
+
+        .architecture-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .architecture-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .architecture-item strong {
+            display: block;
+            color: #172554;
+            margin-bottom: 7px;
+        }
+
+        .architecture-item span {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .cards,
+            .status-grid,
+            .order-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .architecture-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .cards,
+            .status-grid,
+            .order-grid,
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 22px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h1>
+        Radiology Integration & Technical Support System
+    </h1>
+
+    <p>
+        Educational simulation of a healthcare radiology environment
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- PATIENT INFORMATION -->
+
+    <h2 class="section-title">
+        Patient Information
+    </h2>
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Patient ID
+            </div>
+
+            <div class="card-value">
+                {{ patient["patient_id"] }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Patient Name
+            </div>
+
+            <div class="card-value">
+                {{ patient["patient_name"] }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Date of Birth
+            </div>
+
+            <div class="card-value">
+                {{ patient["date_of_birth"] }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Gender
+            </div>
+
+            <div class="card-value">
+                {{ patient["gender"] }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- RADIOLOGY WORKFLOW -->
+
+    <h2 class="section-title">
+        Radiology Workflow
+    </h2>
+
+    <div class="workflow-box">
+
+        <div class="workflow">
+
+
+            <div class="system">
+                HIS
+                <small>Patient / Order</small>
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="system">
+                HL7
+                <small>Information Exchange</small>
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="system">
+                RIS
+                <small>Workflow / Worklist</small>
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="system">
+                CT
+                <small>Imaging Modality</small>
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="system">
+                DICOM
+                <small>Image Communication</small>
+            </div>
+
+
+            <div class="arrow">
+                →
+            </div>
+
+
+            <div class="system">
+                PACS
+                <small>Image Storage</small>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- CURRENT ORDER -->
+
+    <h2 class="section-title">
+        Current Radiology Order
+    </h2>
+
+    <div class="order-box">
+
+        <div class="order-grid">
+
+
+            <div class="order-item">
+
+                <label>
+                    Order ID
+                </label>
+
+                <strong>
+                    {{ order["order_id"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="order-item">
+
+                <label>
+                    Modality
+                </label>
+
+                <strong>
+                    {{ order["modality"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="order-item">
+
+                <label>
+                    Study Description
+                </label>
+
+                <strong>
+                    {{ order["study_description"] }}
+                </strong>
+
+            </div>
+
+
+            <div class="order-item">
+
+                <label>
+                    Status
+                </label>
+
+                <strong class="status-text">
+                    {{ order["status"] }}
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- INTEGRATION STATUS -->
+
+    <h2 class="section-title">
+        Integration Status
+    </h2>
+
+    <div class="status-grid">
+
+
+        <div class="status-card">
+
+            <div class="status-header">
+
+                <div class="status-name">
+                    HL7
+                </div>
+
+                <div class="status-dot"></div>
+
+            </div>
+
+            <div class="status-text">
+                ✓ Message Processing
+            </div>
+
+        </div>
+
+
+        <div class="status-card">
+
+            <div class="status-header">
+
+                <div class="status-name">
+                    RIS
+                </div>
+
+                <div class="status-dot"></div>
+
+            </div>
+
+            <div class="status-text">
+                ✓ Order Workflow
+            </div>
+
+        </div>
+
+
+        <div class="status-card">
+
+            <div class="status-header">
+
+                <div class="status-name">
+                    DICOM
+                </div>
+
+                <div class="{% if support_status == 'FAILURE' %}status-dot status-dot-failure{% else %}status-dot{% endif %}">
+                </div>
+
+            </div>
+
+            {% if support_status == "FAILURE" %}
+
+                <div class="failure-text">
+                    ✗ Connection Failed
+                </div>
+
+            {% else %}
+
+                <div class="status-text">
+                    ✓ Image Transfer Ready
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="status-card">
+
+            <div class="status-header">
+
+                <div class="status-name">
+                    PACS
+                </div>
+
+                <div class="{% if support_status == 'FAILURE' %}status-dot status-dot-failure{% else %}status-dot{% endif %}">
+                </div>
+
+            </div>
+
+            {% if support_status == "FAILURE" %}
+
+                <div class="failure-text">
+                    ✗ Storage Unavailable
+                </div>
+
+            {% else %}
+
+                <div class="status-text">
+                    ✓ Study Storage Ready
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+
+    <!-- TECHNICAL SUPPORT CONTROL -->
+
+    <h2 class="section-title">
+        Technical Support Control
+    </h2>
+
+    <div class="hl7-box">
+
+        <div class="button-area">
+
+
+            <a href="/send-hl7"
+               class="button hl7-button">
+                Send New HL7 Order
+            </a>
+
+
+            <a href="/dicom-info"
+               class="button dicom-button">
+                View DICOM Metadata
+            </a>
+
+
+            <a href="/network-test"
+               class="button network-button">
+                Run Network Test
+            </a>
+
+
+            <a href="/ris-worklist"
+               class="button ris-button">
+                Open RIS Worklist
+            </a>
+
+
+            <a href="/sql-explorer"
+               class="button sql-button">
+                SQL Database Explorer
+            </a>
+
+
+            <a href="/simulate-failure"
+               class="button failure-button">
+                Simulate DICOM Failure
+            </a>
+
+
+            <a href="/reset-system"
+               class="button reset-button">
+                Reset System
+            </a>
+
+
+        </div>
+
+
+        {% if support_status == "FAILURE" %}
+
+
+        <div class="support-box failure-support">
+
+            <h3>
+                ⚠ Technical Support Alert
+            </h3>
+
+            <p>
+                {{ support_message }}
+            </p>
+
+
+            <ol class="troubleshooting">
+
+                <li>
+                    Check network connectivity between the modality and PACS.
+                </li>
+
+                <li>
+                    Verify the PACS IP address.
+                </li>
+
+                <li>
+                    Verify the DICOM port.
+                </li>
+
+                <li>
+                    Verify the DICOM AE Title.
+                </li>
+
+                <li>
+                    Check firewall rules.
+                </li>
+
+                <li>
+                    Check PACS service status.
+                </li>
+
+                <li>
+                    Review DICOM and system logs.
+                </li>
+
+            </ol>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="support-box normal-support">
+
+            <h3>
+                ✓ System Status: Normal
+            </h3>
+
+            <p>
+                {{ support_message }}
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- SYSTEM ARCHITECTURE -->
+
+    <h2 class="section-title">
+        System Architecture
+    </h2>
+
+    <div class="architecture-box">
+
+        <div class="architecture-grid">
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    SQL Database
+                </strong>
+
+                <span>
+                    Stores patients, orders, studies,
+                    HL7 messages and system logs.
+                </span>
+
+            </div>
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    HL7 Integration
+                </strong>
+
+                <span>
+                    Simulates healthcare information
+                    exchange between HIS and RIS.
+                </span>
+
+            </div>
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    RIS Workflow
+                </strong>
+
+                <span>
+                    Displays radiology orders and
+                    examination information.
+                </span>
+
+            </div>
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    DICOM
+                </strong>
+
+                <span>
+                    Generates a DICOM study and
+                    reads imaging metadata.
+                </span>
+
+            </div>
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    PACS Simulation
+                </strong>
+
+                <span>
+                    Represents image storage and
+                    retrieval workflow.
+                </span>
+
+            </div>
+
+
+            <div class="architecture-item">
+
+                <strong>
+                    Technical Support
+                </strong>
+
+                <span>
+                    Provides network diagnostics,
+                    logs and failure troubleshooting.
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- HL7 -->
+
+    <h2 class="section-title">
+        HL7 Order Simulator
+    </h2>
+
+    <div class="hl7-box">
+
+
+        {% if latest_hl7 %}
+
+
+        <div class="success-message">
+
+            ✓ Latest HL7 ORM message generated
+            and stored successfully
+
+        </div>
+
+
+        <div class="hl7-message">
+{{ latest_hl7["raw_message"] }}
+        </div>
+
+
+        {% else %}
+
+
+        <p>
+            No HL7 message has been generated yet.
+        </p>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- SYSTEM LOGS -->
+
+    <h2 class="section-title">
+        System Logs
+    </h2>
+
+    <div class="table-box">
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Time
+                    </th>
+
+                    <th>
+                        System
+                    </th>
+
+                    <th>
+                        Event
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Message
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for log in logs %}
+
+
+                <tr>
+
+                    <td>
+                        {{ log["timestamp"] }}
+                    </td>
+
+
+                    <td>
+                        {{ log["system_name"] }}
+                    </td>
+
+
+                    <td>
+                        {{ log["event"] }}
+                    </td>
+
+
+                    <td>
+
+
+                        {% if log["status"] == "ERROR" %}
+
+
+                            <span class="error-badge">
+                                {{ log["status"] }}
+                            </span>
+
+
+                        {% else %}
+
+
+                            <span class="success-badge">
+                                {{ log["status"] }}
+                            </span>
+
+
+                        {% endif %}
+
+
+                    </td>
+
+
+                    <td>
+                        {{ log["message"] }}
+                    </td>
+
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+<div class="footer">
+
+    Mini Healthcare Integration Project
+    |
+    Biomedical Engineering
+
+</div>
+
+
+</body>
+
+</html>

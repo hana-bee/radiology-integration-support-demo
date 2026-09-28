@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>RIS Worklist</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #1f2937;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 28px 45px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.85;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1300px;
+            margin: 35px auto;
+        }
+
+        .title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .title-row h2 {
+            margin: 0;
+            color: #172554;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .info-box p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .table-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #172554;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #dbeafe;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .scheduled {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .received {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #172554;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: #1e3a8a;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        .workflow {
+            margin-top: 28px;
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .workflow h3 {
+            margin-top: 0;
+            color: #9a3412;
+        }
+
+        .workflow p {
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        RIS Worklist
+    </h1>
+
+    <p>
+        Radiology Information System — Examination Orders
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <div class="title-row">
+
+        <h2>
+            Scheduled Radiology Examinations
+        </h2>
+
+        <a href="/" class="button">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="info-box">
+
+        <p>
+            This simulated RIS Worklist retrieves radiology
+            orders from the SQL database and presents the
+            information that can be used by the imaging workflow.
+        </p>
+
+    </div>
+
+
+    <div class="table-box">
+
+        {% if orders %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Order ID
+                    </th>
+
+                    <th>
+                        Patient ID
+                    </th>
+
+                    <th>
+                        Patient Name
+                    </th>
+
+                    <th>
+                        Modality
+                    </th>
+
+                    <th>
+                        Study Description
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for order in orders %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ order["order_id"] }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ order["patient_id"] }}
+                    </td>
+
+                    <td>
+                        {{ order["patient_name"] }}
+                    </td>
+
+                    <td>
+                        {{ order["modality"] }}
+                    </td>
+
+                    <td>
+                        {{ order["study_description"] }}
+                    </td>
+
+                    <td>
+
+                        {% if "HL7" in order["status"] %}
+
+                            <span class="badge received">
+                                {{ order["status"] }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge scheduled">
+                                {{ order["status"] }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty">
+
+            No radiology orders are currently available.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="workflow">
+
+        <h3>
+            How the RIS Worklist fits into the workflow
+        </h3>
+
+        <p>
+
+            HIS creates the patient/order information.
+            The order can be transferred to RIS using HL7.
+            RIS manages the radiology workflow and makes
+            the examination information available to the modality.
+            The imaging system can then use this information
+            to perform the correct examination and send images
+            to PACS using DICOM.
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<div class="footer">
+
+    Mini Healthcare Integration Project
+    |
+    RIS Simulation
+
+</div>
+
+
+</body>
+
+</html>

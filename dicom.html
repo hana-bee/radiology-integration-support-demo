@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>DICOM Metadata</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            margin: 0;
+            padding: 40px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #172554;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .file-name {
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #172554;
+            width: 35%;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 18px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>DICOM Metadata Viewer</h1>
+
+    <p class="subtitle">
+        Metadata extracted from the generated DICOM study
+    </p>
+
+    <div class="file-name">
+        DICOM File: {{ file_name }}
+    </div>
+
+
+    <table>
+
+        <tr>
+            <th>Patient Name</th>
+            <td>{{ metadata["patient_name"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Patient ID</th>
+            <td>{{ metadata["patient_id"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Modality</th>
+            <td>{{ metadata["modality"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Study Description</th>
+            <td>{{ metadata["study_description"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Study Date</th>
+            <td>{{ metadata["study_date"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Accession Number</th>
+            <td>{{ metadata["accession_number"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Study Instance UID</th>
+            <td>{{ metadata["study_uid"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Series Instance UID</th>
+            <td>{{ metadata["series_uid"] }}</td>
+        </tr>
+
+    </table>
+
+
+    <a href="/" class="back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+
+</html>
